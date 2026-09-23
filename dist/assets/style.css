@@ -439,6 +439,40 @@ h1 em,h2 em,h3 em,.service-quote em { font-style:normal; font-weight:inherit; }
 .button:active { transform:translateY(0); box-shadow:inset 0 2px 4px #1c0c1133,0 2px 5px #1c0c1114; }
 .button:focus-visible,.text-link:focus-visible { outline-color:var(--primary); outline-offset:5px; }
 .contact-band .button:focus-visible,.calculator-result .button:focus-visible { outline-color:var(--secondary); }
+/* The two principal actions have a continuous sheen and a separate arrow disc. */
+.button-featured {
+  position:relative; isolation:isolate; overflow:hidden;
+  border:1px solid #923b5a; border-radius:999px;
+  background:radial-gradient(ellipse at 10% -120%,#eeb4c9 0%,#eeb4c900 66%),linear-gradient(115deg,#9e3e60 0%,#802c4b 58%,#68213c 100%);
+  font-size:15px; font-weight:700; letter-spacing:0; line-height:1.3;
+  text-shadow:none;
+  box-shadow:inset 0 1px 0 #fbdce980,inset 0 -1px 0 #49152c40,0 8px 20px -10px #59263780;
+}
+.button-featured::before {
+  content:''; position:absolute; inset:0; z-index:-1; pointer-events:none; border-radius:inherit;
+  background:linear-gradient(115deg,#ffffff20,transparent 55%); opacity:.45;
+  transition:opacity .3s;
+}
+.button-featured>.button-label { font:inherit; white-space:nowrap; }
+.button-featured>.button-icon {
+  width:40px; height:40px; flex:0 0 40px; display:grid; place-items:center;
+  border-radius:50%; color:#6e2842; background:linear-gradient(145deg,#fff,#edd5df);
+  box-shadow:inset 0 1px 0 #fff,0 1px 4px #40142624;
+  transition:background .25s,box-shadow .25s;
+}
+.button-icon svg { display:block; transition:transform .3s cubic-bezier(.22,1,.36,1); }
+.hero-actions .button-featured { min-height:62px; padding:9px 9px 9px 25px; gap:28px; }
+.site-header nav>.button-featured { height:52px; min-height:52px; padding:7px 7px 7px 20px; border-radius:999px; gap:19px; font-size:13px; }
+.site-header .button-featured>.button-icon { width:34px; height:34px; flex-basis:34px; }
+.site-header .button-icon svg { width:18px; height:18px; }
+.button-featured:hover {
+  background:radial-gradient(ellipse at 10% -120%,#eeb4c9 0%,#eeb4c900 66%),linear-gradient(115deg,#9e3e60 0%,#802c4b 58%,#68213c 100%);
+  box-shadow:inset 0 1px 0 #fbdce999,inset 0 -1px 0 #49152c40,0 10px 24px -10px #59263799;
+}
+.button-featured:hover::before,.button-featured:focus-visible::before { opacity:1; }
+.button-featured:hover .button-icon,.button-featured:focus-visible .button-icon { background:#fff; }
+.button-featured:hover .button-icon svg,.button-featured:focus-visible .button-icon svg { transform:translate(1px,-1px); }
+.button-featured:active { transform:translateY(0); box-shadow:inset 0 1px 3px #40142633,0 3px 9px -5px #59263766; }
 .text-link { font-weight:600; }
 .segmented span { background:var(--blush); }
 .segmented input:checked+span { background:var(--lacquer); color:var(--white); font-weight:700; box-shadow:inset 0 1px 0 #fff5,inset 0 0 0 1px #792b47,0 3px 8px #60243a26; }
@@ -485,7 +519,7 @@ h1 em,h2 em,h3 em,.service-quote em { font-style:normal; font-weight:inherit; }
   .site-header .brand-mark { width:38px; height:38px; flex-basis:38px; }
   .site-header .brand-name { font-size:21px; }
   .site-header .brand-caption { font-size:7px; letter-spacing:2px; }
-  .site-header .nav-cta { font-size:12px; padding-inline:16px; gap:14px; }
+  .site-header nav>.button-featured { font-size:12px; padding-left:16px; gap:13px; }
 }
 @media(max-width:850px) {
   .site-header .brand { gap:9px; }
@@ -499,10 +533,12 @@ h1 em,h2 em,h3 em,.service-quote em { font-style:normal; font-weight:inherit; }
 }
 @media(max-width:600px) {
   .hero h1 { font-size:clamp(29px,8.8vw,42px); }
-  .hero-actions .button,.hero-actions .text-link { font-size:15px; font-weight:700; border-radius:6px; }
+  .hero-actions .button,.hero-actions .text-link { font-size:15px; font-weight:700; border-radius:999px; }
+  .hero-actions .button-featured { min-height:58px; padding:8px 8px 8px 21px; gap:16px; }
+  .hero-actions .button-featured>.button-icon { width:38px; height:38px; flex-basis:38px; }
   .hero-actions .text-link {
-    background:var(--pearl); color:var(--wine); border-color:#d4bbc5;
-    text-shadow:0 1px 0 #fff; box-shadow:inset 0 1px 0 #fff,0 3px 9px #1c0c110c;
+    background:linear-gradient(145deg,#fff,#f6edf1); color:var(--wine); border-color:#d4bbc5;
+    text-shadow:none; box-shadow:inset 0 1px 0 #fff,0 3px 9px #1c0c1108;
   }
   .hero-scene img { filter:blur(2px) saturate(.45); }
   .contact-band h2 { font-size:2rem; }

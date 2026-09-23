@@ -1,0 +1,71 @@
+/* DM Sans for both headings and body; the handwritten signature is a brand mark. */
+h1,h2,h3 { font-family:var(--display); font-weight:600; letter-spacing:-.035em; }
+h1 { line-height:1.18; }
+h1 em,h2 em,h3 em,.service-quote em { font-style:normal; font-weight:inherit; }
+.brand-name { font-family:var(--display); font-weight:600; letter-spacing:-.055em; }
+.hero h1 { font-size:clamp(40px,4.4vw,68px); font-weight:700; line-height:1.13; letter-spacing:-.055em; }
+.hero h1 em { font-weight:700; color:var(--primary); }
+.hero-title-line { padding-bottom:.12em; margin-bottom:-.12em; }
+.hero { background:linear-gradient(115deg,var(--sand),var(--blush)); }
+.hero-visual .signature { color:var(--text); }
+.hero-visual-caption { color:var(--muted); }
+.line { background:var(--accent); }
+.eyebrow { font-weight:600; }
+.section-heading .eyebrow,.intro-inner .eyebrow,.page-intro>.eyebrow,
+.article-page>header .eyebrow,.article-content .eyebrow,.label-plain,.not-found .eyebrow,
+.menu-intro { color:var(--primary-ink); }
+.text-link,.reset-link,.inline-link,.circle-link,.contact-phone,.contact-email,
+.property-bottom strong,.detail-price,.help-symbol,.menu-contact>a,
+.breadcrumb a:hover,.detail-nav a:hover,.property-content h3 a:hover,
+.service-item:hover h3,.more-reviews summary { color:var(--primary-ink); }
+.site-header nav>.nav-link:hover,.site-header nav>.nav-link[aria-current] { color:var(--primary-ink); }
+.button { background:var(--primary); color:var(--white); }
+.button:hover { background:var(--primary-hover); }
+.button-white { background:var(--white); color:var(--primary-ink); }
+.button-white:hover { background:var(--background); }
+.button-outline { background:var(--blush); border-color:var(--secondary); color:var(--primary-ink); }
+.button-outline:hover { background:var(--secondary); color:var(--text); }
+.button:focus-visible,.text-link:focus-visible { outline-color:var(--primary); }
+.segmented span { background:var(--blush); }
+.segmented input:checked+span { background:var(--primary); color:var(--white); }
+.property-card:hover { border-color:var(--secondary); }
+.property-bottom strong,.detail-price { font-weight:600; letter-spacing:-.02em; }
+.service-number,.big-number { font-style:normal; font-weight:500; color:var(--accent); }
+.service-quote p { font-weight:500; letter-spacing:-.035em; }
+.service-quote em { color:var(--primary); }
+.signature-static { font-style:normal; font-weight:600; }
+.about-badge strong { font-weight:600; }
+.help-symbol { font-style:normal; }
+.contact-band { background:var(--secondary); color:var(--text); }
+.contact-band .eyebrow { opacity:1; color:var(--text); }
+.contact-band p:not(.eyebrow) { opacity:1; color:color-mix(in srgb,var(--text) 82%,var(--secondary)); }
+.contact-band h2 { font-weight:600; }
+.calculator-result { background:var(--primary); color:var(--white); }
+.calculator-result dt,.calculator-disclaimer,.result-caption { opacity:1; }
+.monthly-value,.mobile-calculation strong { font-weight:600; font-variant-numeric:tabular-nums; }
+.monthly-value output { font-size:clamp(3.1rem,4.2vw,4.1rem); letter-spacing:-.06em; }
+.monthly-value>span { font-size:26px; font-weight:400; }
+.mobile-calculation { background:var(--primary); }
+.contact-monogram { font-style:normal; font-weight:600; letter-spacing:-.1em; }
+.contact-portrait-note { font-style:normal; font-size:12px; line-height:1.7; font-weight:500; letter-spacing:.04em; color:var(--text); }
+.lightbox-caption { font-family:var(--sans); font-weight:500; }
+.lightbox-thumbnails button[aria-current] { border-color:var(--accent); }
+
+@media(min-width:601px) and (max-width:850px) {
+  .hero h1 { font-size:clamp(29px,4.5vw,39px); }
+}
+@media(max-width:850px) {
+  .site-header nav>.nav-link { font-family:var(--sans); font-weight:500; letter-spacing:-.03em; }
+  .monthly-value output { font-size:3rem; }
+}
+@media(max-width:600px) {
+  .hero h1 { font-size:clamp(29px,8.8vw,42px); }
+  .hero-actions .text-link { background:var(--background); color:var(--primary-ink); border-color:var(--secondary); }
+  .hero-scene img { filter:blur(2px) saturate(.45); }
+  .contact-band h2 { font-size:2rem; }
+  .monthly-value output { font-size:3.65rem; }
+  .monthly-value>span { font-size:25px; }
+}
+@media(max-width:380px) {
+  .monthly-value output { font-size:3.1rem; }
+}

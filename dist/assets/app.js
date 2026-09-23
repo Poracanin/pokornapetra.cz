@@ -1,11 +1,6 @@
 import './motion.js';
-
-const menuButton=document.querySelector('.menu-toggle');
-const menu=document.querySelector('#navigation');
-function closeMenu(){menuButton?.setAttribute('aria-expanded','false');menu?.classList.remove('is-open');}
-menuButton?.addEventListener('click',()=>{const opened=menuButton.getAttribute('aria-expanded')==='true';menuButton.setAttribute('aria-expanded',String(!opened));menu?.classList.toggle('is-open',!opened)});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menuButton?.getAttribute('aria-expanded')==='true'){closeMenu();menuButton.focus()}});
-document.addEventListener('click',e=>{if(menu&&!menu.contains(e.target)&&!menuButton.contains(e.target))closeMenu()});
+import './navigation.js';
+import './gallery.js';
 
 import {calculateMortgage} from './mortgage.js';
 const currency=n=>new Intl.NumberFormat('cs-CZ',{maximumFractionDigits:0}).format(n)+' Kč';
@@ -30,17 +25,6 @@ if(filters){
 }
 const articleInputs=document.querySelectorAll('[name="article-category"]');
 articleInputs.forEach(input=>input.addEventListener('change',()=>{let count=0;document.querySelectorAll('[data-article]').forEach(card=>{card.hidden=input.value!=='Vše'&&card.dataset.category!==input.value;if(!card.hidden)count++});document.querySelector('#article-count').textContent=count===1?'1 článek':`${count} články`;}));
-const gallery=document.querySelector('#gallery-dialog');
-if(gallery){
- const {photos,title}=JSON.parse(document.querySelector('#gallery-data').textContent);let index=0,trigger;
- const show=i=>{index=(i+photos.length)%photos.length;document.querySelector('#gallery-image').src=photos[index];document.querySelector('#gallery-image').alt=`${title} – fotografie ${index+1} z ${photos.length}`;document.querySelector('#gallery-count').textContent=`${index+1} / ${photos.length}`;};
- document.querySelectorAll('[data-gallery-open]').forEach(button=>button.addEventListener('click',()=>{trigger=button;show(Number(button.dataset.galleryOpen));gallery.showModal()}));
- document.querySelector('[data-gallery-close]').addEventListener('click',()=>gallery.close());
- document.querySelector('[data-gallery-prev]').addEventListener('click',()=>show(index-1));document.querySelector('[data-gallery-next]').addEventListener('click',()=>show(index+1));
- gallery.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'){e.preventDefault();show(index-1)}if(e.key==='ArrowRight'){e.preventDefault();show(index+1)}});
- gallery.addEventListener('click',e=>{if(e.target===gallery)gallery.close()});gallery.addEventListener('close',()=>trigger?.focus());
- let touchX;gallery.addEventListener('touchstart',e=>touchX=e.changedTouches[0].screenX,{passive:true});gallery.addEventListener('touchend',e=>{const diff=e.changedTouches[0].screenX-touchX;if(Math.abs(diff)>60)show(index+(diff<0?1:-1))},{passive:true});
-}
 const mortgage=document.querySelector('#mortgage-form');
 if(mortgage){
  const ids=['price','deposit','rate','years'];const controls=Object.fromEntries(ids.map(id=>[id,mortgage.elements.namedItem(id)]));

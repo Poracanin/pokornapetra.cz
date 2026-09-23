@@ -1,3 +1,5 @@
+import './motion.js';
+
 const menuButton=document.querySelector('.menu-toggle');
 const menu=document.querySelector('#navigation');
 function closeMenu(){menuButton?.setAttribute('aria-expanded','false');menu?.classList.remove('is-open');}

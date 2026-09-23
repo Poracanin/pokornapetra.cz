@@ -1,0 +1,96 @@
+/* Quiet, one-time entrances. Content remains available without JavaScript. */
+.hero-title-line {
+  display: block;
+  overflow: clip;
+  padding: 0 .14em .16em;
+  margin: 0 -.14em -.16em;
+}
+
+.hero-title-line > span,
+.hero-title-line > em {
+  display: block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root { --entrance-ease: cubic-bezier(.22, 1, .36, 1); }
+
+  .hero-copy > .eyebrow {
+    animation: quiet-rise 850ms var(--entrance-ease) 40ms backwards;
+  }
+  .hero-title-line > span,
+  .hero-title-line > em {
+    animation: title-unveil 1100ms var(--entrance-ease) 100ms backwards;
+  }
+  .hero-title-line:nth-child(2) > em { animation-delay: 230ms; }
+  .hero-description {
+    animation: quiet-rise 950ms var(--entrance-ease) 260ms backwards;
+  }
+  .hero-actions {
+    animation: quiet-rise 900ms var(--entrance-ease) 360ms backwards;
+  }
+  .hero-trust {
+    animation: quiet-rise 850ms var(--entrance-ease) 440ms backwards;
+  }
+  .hero-scene {
+    animation: atmosphere-in 1600ms var(--entrance-ease) backwards;
+  }
+  .hero-visual > img {
+    transform-origin: center bottom;
+    animation: portrait-in 1500ms var(--entrance-ease) 90ms backwards;
+  }
+  .hero-visual .signature {
+    animation: signature-in 1100ms var(--entrance-ease) 620ms backwards;
+  }
+  .hero-visual-caption {
+    animation: atmosphere-in 1000ms var(--entrance-ease) 500ms backwards;
+  }
+
+  .page-intro > .eyebrow,
+  .detail-heading > .label-plain,
+  .article-page > header > .eyebrow {
+    animation: quiet-rise 750ms var(--entrance-ease) backwards;
+  }
+  .page-intro > h1,
+  .detail-heading > h1,
+  .article-page > header > h1,
+  .legal-copy > h1,
+  .not-found > h1 {
+    animation: quiet-rise 1000ms var(--entrance-ease) 90ms backwards;
+  }
+  .page-lead,
+  .detail-heading > .location-line {
+    animation: quiet-rise 900ms var(--entrance-ease) 180ms backwards;
+  }
+
+  [data-reveal-pending] { opacity: 0; }
+
+  /* Focus and anchor navigation always take precedence over decoration. */
+  [data-reveal-pending]:focus-within,
+  [data-reveal-pending]:target { opacity: 1; }
+  .hero-actions:focus-within { animation: none; }
+
+  @keyframes quiet-rise {
+    from { opacity: 0; translate: 0 14px; }
+    to { opacity: 1; translate: 0 0; }
+  }
+  @keyframes title-unveil {
+    from { opacity: 0; translate: 0 104%; }
+    to { opacity: 1; translate: 0 0; }
+  }
+  @keyframes atmosphere-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes portrait-in {
+    from { opacity: 0; transform: translateY(12px) scale(1.025); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes signature-in {
+    from { opacity: 0; translate: 0 6px; }
+    to { opacity: 1; translate: 0 0; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal-pending] { opacity: 1; }
+}

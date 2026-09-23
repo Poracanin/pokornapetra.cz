@@ -349,3 +349,43 @@
   .lightbox-tools { gap:5px; }
   .lightbox .lightbox-fit { padding-inline:9px; font-size:9px; }
 }
+
+/* An architectural setting for the contact portrait, with a fine inset frame. */
+.contact-portrait {
+  position:relative; isolation:isolate; width:min(100%,340px); height:320px;
+  margin:0 auto 27px; overflow:hidden; border-radius:4px 42px 4px 4px;
+  background:#eee5df; box-shadow:0 12px 32px #5e37400a;
+}
+.contact-portrait-scene {
+  position:absolute; inset:-5px; z-index:0;
+  background:linear-gradient(110deg,#f4ece3e8 10%,#f1e6df66 62%),url('/assets/properties/236012/1.jpg') center / cover;
+  filter:blur(1px) saturate(.55);
+}
+.contact-portrait::after {
+  content:''; position:absolute; inset:12px; z-index:3; pointer-events:none;
+  border:1px solid #fff9; border-radius:2px 31px 2px 2px;
+}
+.contact-monogram {
+  position:absolute; top:23px; left:23px; z-index:1;
+  font:italic 88px/1 var(--serif); letter-spacing:-12px; color:#94264f19;
+}
+.contact-portrait>img {
+  position:absolute; bottom:0; left:50%; z-index:2;
+  width:340px; height:320px; max-width:none;
+  object-fit:contain; object-position:center bottom; transform:translateX(-44%);
+}
+.contact-portrait-note {
+  position:absolute; left:25px; bottom:27px; z-index:3; text-align:left;
+  font:italic 22px/1.25 var(--serif); color:#76625f;
+}
+.number-wrap input { font-variant-numeric:tabular-nums; }
+@media(max-width:850px) {
+  .contact-portrait { height:290px; }
+  .contact-portrait>img { width:315px; height:290px; }
+  .contact-monogram { font-size:76px; left:18px; }
+  .contact-portrait-note { font-size:19px; left:22px; }
+}
+@media(max-width:600px) {
+  .contact-portrait { width:min(100%,330px); height:290px; }
+  .contact-portrait>img { width:310px; height:290px; transform:translateX(-44%); }
+}

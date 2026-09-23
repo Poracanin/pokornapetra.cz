@@ -3,6 +3,7 @@ import './navigation.js';
 import './gallery.js';
 
 import {calculateMortgage} from './mortgage.js';
+import {parseAmount,formatAmount,formatAmountField,bindAmountEditing} from './amount-input.js';
 const currency=n=>new Intl.NumberFormat('cs-CZ',{maximumFractionDigits:0}).format(n)+' Kč';
 const params=new URLSearchParams(location.search);
 const filters=document.querySelector('#property-filters');
@@ -28,17 +29,22 @@ articleInputs.forEach(input=>input.addEventListener('change',()=>{let count=0;do
 const mortgage=document.querySelector('#mortgage-form');
 if(mortgage){
  const ids=['price','deposit','rate','years'];const controls=Object.fromEntries(ids.map(id=>[id,mortgage.elements.namedItem(id)]));
- const read=()=>Object.fromEntries(ids.map(id=>[id,controls[id].value===''?NaN:Number(controls[id].value)]));
+ const amountIds=['price','deposit'];
+ const read=()=>Object.fromEntries(ids.map(id=>[id,amountIds.includes(id)?parseAmount(controls[id].value):controls[id].value===''?NaN:Number(controls[id].value)]));
  const ranges=Object.fromEntries(ids.map(id=>[id,mortgage.querySelector(`[data-range="${id}"]`)]));
  function paintRanges(){for(const id of ids){const input=ranges[id];input.style.setProperty('--range-progress',`${100*(Number(input.value)-Number(input.min))/(Number(input.max)-Number(input.min))}%`);}}
  function update(){
+  amountIds.forEach(id=>formatAmountField(controls[id]));
   const values=read(),error=document.querySelector('#calculator-error'),contact=document.querySelector('#mortgage-contact');
+  controls.price.setCustomValidity(Number.isFinite(values.price)&&values.price>=100000&&values.price<=50000000?'':'Zadejte cenu od 100 000 do 50 000 000 Kč.');
+  controls.deposit.setCustomValidity(Number.isFinite(values.deposit)&&values.deposit>=0&&values.deposit<=values.price?'':'Vlastní prostředky musí být od 0 Kč do ceny nemovitosti.');
   if(Number.isFinite(values.price)&&values.price>=100000&&values.price<=50000000){controls.deposit.max=String(values.price);ranges.deposit.max=String(values.price);mortgage.querySelector('[data-range="deposit"] + .range-limits span:last-child').textContent=currency(values.price)}
   for(const id of ids)if(Number.isFinite(values[id]))ranges[id].value=String(values[id]);paintRanges();
   try{const result=calculateMortgage(values);error.hidden=true;document.querySelector('#mobile-payment').textContent=currency(result.monthly);controls.deposit.setCustomValidity('');document.querySelector('#monthly-payment').textContent=new Intl.NumberFormat('cs-CZ',{maximumFractionDigits:0}).format(result.monthly);document.querySelector('#loan-amount').textContent=currency(result.principal);document.querySelector('#total-payment').textContent=currency(result.total);document.querySelector('#total-interest').textContent=currency(result.interest);document.querySelector('.result-caption').textContent=result.principal===0?'Při těchto hodnotách úvěr nepotřebujete.':'Každý měsíc blíž k vlastnímu.';contact.href='/kontakt/?'+new URLSearchParams({tema:'financovani',cena:values.price,vlastni:values.deposit,sazba:values.rate,roky:values.years});return result;}
   catch(err){error.textContent=err.message;error.hidden=false;document.querySelector('#mobile-payment').textContent='Zkontrolujte hodnoty';document.querySelector('#monthly-payment').textContent='—';for(const id of ['loan-amount','total-payment','total-interest'])document.getElementById(id).textContent='—';contact.href='/kontakt/?tema=financovani';if(values.deposit>values.price)controls.deposit.setCustomValidity('Vlastní prostředky nemohou převýšit cenu nemovitosti.');return null;}
  }
- for(const id of ids){controls[id].addEventListener('input',update);ranges[id].addEventListener('input',()=>{controls[id].value=ranges[id].value;update()})}
+ amountIds.forEach(id=>bindAmountEditing(controls[id]));
+ for(const id of ids){controls[id].addEventListener('input',update);ranges[id].addEventListener('input',()=>{controls[id].value=amountIds.includes(id)?formatAmount(ranges[id].value):ranges[id].value;update()})}
  mortgage.addEventListener('submit',e=>e.preventDefault());mortgage.addEventListener('reset',()=>setTimeout(()=>{controls.deposit.max='5000000';ranges.deposit.max='5000000';update()},0));
  const fromListing=Number(params.get('cena'));if(fromListing>=100000&&fromListing<=50000000){controls.price.value=fromListing;controls.deposit.value=Math.round(fromListing*.2)}update();
  if(document.modelContext?.registerTool){const lifecycle=new AbortController();Promise.resolve(document.modelContext.registerTool({name:'configure_mortgage_calculator',title:'Nastavit hypoteční kalkulačku',description:'Nastaví modelové hodnoty viditelné kalkulačky a vrátí orientační výsledek. Nevytváří žádost o úvěr.',inputSchema:{type:'object',properties:{price:{type:'number',minimum:100000,maximum:50000000},deposit:{type:'number',minimum:0},rate:{type:'number',minimum:0,maximum:15},years:{type:'integer',minimum:1,maximum:40}},required:ids,additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(input){const result=calculateMortgage(input);for(const id of ids)controls[id].value=input[id];update();return {monthlyPayment:Math.round(result.monthly),loan:result.principal,currency:'CZK'};}},{signal:lifecycle.signal})).catch(()=>{});window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true})}

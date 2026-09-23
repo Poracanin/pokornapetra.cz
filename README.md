@@ -25,6 +25,20 @@ Náhled běží na http://127.0.0.1:4317. `npm run check` ověří interní odka
 
 Po úpravách spusťte `npm run build`. Soubor `.openai/hosting.json` váže projekt na Sites. Výstup `dist/` je zároveň přenositelný na jiný statický hosting podporující adresáře s index.html a vlastní 404.html.
 
+## GitHub Pages
+
+Workflow `.github/workflows/pages.yml` při každém pushi do `main` sestaví a ověří web a publikuje pouze `dist/`. Lze jej spustit i ručně v záložce Actions. V Settings → Pages je zdrojem **GitHub Actions**.
+
+Základní cestu workflow načítá z nastavení Pages: `/pokornapetra.cz` pro adresu `https://poracanin.github.io/pokornapetra.cz/`, prázdnou cestu pro případnou vlastní doménu. Odkazy, galerie, obrázky a fonty se při sestavení automaticky přizpůsobí. Doména `pokornapetra.cz` zatím není připojená.
+
+Lokální ověření verze pro podadresář:
+
+```sh
+SITE_BASE_PATH=/pokornapetra.cz npm run build
+SITE_BASE_PATH=/pokornapetra.cz npm run check
+npm run build # obnoví běžný lokální výstup pro kořen domény
+```
+
 ## Kontakty a provoz
 
 Formulář validuje vstupy a sestaví skutečný mailto odkaz na petra.pokorna@bidli.cz. Zprávu návštěvník odešle ve své e-mailové aplikaci; k dispozici je také kopírování. Neexistuje falešné potvrzení o doručení. Web neposílá e-maily ze serveru a neobsahuje databázi poptávek. Přímé odesílání z webu by vyžadovalo zvolenou e-mailovou službu a její provozní přístup.

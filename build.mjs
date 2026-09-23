@@ -3,6 +3,16 @@ import path from 'node:path';
 import {page,card,cta,arrow,featuredArrow} from './src/shared.mjs';
 export const properties=JSON.parse(fs.readFileSync('content/properties.json','utf8'));
 export const reviews=JSON.parse(fs.readFileSync('content/reviews.json','utf8'));
+const basePath=(process.env.SITE_BASE_PATH||'').replace(/\/+$/,'');
+if(basePath&&!/^\/[A-Za-z0-9._~/-]+$/.test(basePath))throw new Error('SITE_BASE_PATH must be an absolute URL path.');
+function siteHtml(html){
+ if(!basePath)return html;
+ html=html.replace(/\b(href|src)="\/(?!\/)/g,(_,attribute)=>`${attribute}="${basePath}/`);
+ return html.replace(/(<script id="gallery-data" type="application\/json">)([\s\S]*?)(<\/script>)/g,(_,open,json,close)=>{
+  const data=JSON.parse(json);data.photos=data.photos.map(photo=>photo.startsWith('/')&&!photo.startsWith('//')?basePath+photo:photo);
+  return open+JSON.stringify(data).replace(/</g,'\\u003c')+close;
+ });
+}
 export function write(route,html){const dest=path.join('dist',route,'index.html');fs.mkdirSync(path.dirname(dest),{recursive:true});fs.writeFileSync(dest,html);}
 fs.writeFileSync('dist/assets/style.css',fs.readFileSync('src/fonts.css','utf8')+'\n'+fs.readFileSync('src/style.css','utf8')+'\n'+fs.readFileSync('src/motion.css','utf8')+'\n'+fs.readFileSync('src/refinements.css','utf8')+'\n'+fs.readFileSync('src/brand.css','utf8'));fs.copyFileSync('src/app.js','dist/assets/app.js');fs.copyFileSync('src/mortgage.js','dist/assets/mortgage.js');fs.copyFileSync('src/motion.js','dist/assets/motion.js');for(const name of ['navigation','gallery','amount-input'])fs.copyFileSync(`src/${name}.js`,`dist/assets/${name}.js`);
 write('',page({title:'Vaše nemovitost – moje osobní péče',description:'Petra Pokorná, certifikovaná realitní makléřka. Více než 10 let zkušeností s prodejem, koupí a pronájmem nemovitostí.',body:`
@@ -12,4 +22,8 @@ write('',page({title:'Vaše nemovitost – moje osobní péče',description:'Pet
 <section class="services-section container"><div class="section-heading"><div><p class="eyebrow">OD PRVNÍ SCHŮZKY PO PŘEDÁNÍ</p><h2>Na dobré spolupráci záleží.</h2></div></div><div class="service-grid">${[['Prodej nemovitosti','Promyšlená prezentace, správné nacenění a péče o celý průběh.','prodej'],['Koupě a pronájem','Pomohu vám zorientovat se a najít řešení, které dává smysl.','koupe'],['Realitní poradenství','Jasné odpovědi na vaše otázky. Srozumitelně a bez zbytečných obav.','poradenstvi']].map(([title,text,id],i)=>`<a class="service-item" href="/sluzby/#${id}"><span class="service-number">0${i+1}</span><div><h3>${title}</h3><p>${text}</p></div>${arrow}</a>`).join('')}</div></section>
 ${cta()}`}));
 if(fs.existsSync('src/pages.mjs')) {const {buildPages}=await import('./src/pages.mjs');await buildPages({write,properties,reviews});}
-console.log('Site generated in dist/');
+if(basePath){
+ for(const name of fs.readdirSync('dist',{recursive:true}).filter(name=>name.endsWith('.html'))){const file=path.join('dist',name);fs.writeFileSync(file,siteHtml(fs.readFileSync(file,'utf8')));}
+ const file='dist/assets/style.css';fs.writeFileSync(file,fs.readFileSync(file,'utf8').replace(/(url\(\s*['"]?)\/(?!\/)/g,(_,prefix)=>`${prefix}${basePath}/`));
+}
+console.log(`Site generated in dist/ (base path: ${basePath||'/'})`);

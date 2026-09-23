@@ -61,3 +61,11 @@
   font-display: swap;
   src: url(/assets/fonts/font-9.ttf) format('truetype');
 }
+
+@font-face {
+  font-family: 'Allura';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/assets/fonts/allura.ttf) format('truetype');
+}

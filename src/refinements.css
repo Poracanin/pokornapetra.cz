@@ -4,15 +4,19 @@
 .header-inner { position:relative; top:0; height:96px; min-height:0; z-index:2; isolation:isolate; pointer-events:auto; transition:height .3s, top .3s, padding .3s; }
 .header-inner::before { content:''; position:absolute; inset:0; z-index:-1; border:1px solid transparent; border-radius:12px; transition:background .3s, box-shadow .3s; }
 .site-header.is-scrolled::before { opacity:0; }
-.is-scrolled .header-inner { top:10px; height:72px; padding-inline:24px; }
+.is-scrolled .header-inner { top:10px; height:72px; padding:10px 10px 10px 20px; }
 .is-scrolled .header-inner::before { background:#fdfbfced; border-color:#db9aaf52; backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); box-shadow:0 8px 32px #1c0c1110; }
-.site-header .brand-name { transition:font-size .3s; }
-.is-scrolled .brand-name { font-size:25px; }
 .site-header nav { gap:27px; }
 .site-header nav>.nav-link::after { content:''; height:1px; background:var(--primary); position:absolute; bottom:4px; left:0; right:0; transform:scaleX(0); transform-origin:left; transition:transform .25s; }
 .site-header nav>.nav-link:hover::after,.site-header nav>.nav-link[aria-current]::after { transform:scaleX(1); }
 .site-header nav>.nav-cta:hover,.site-header nav>.nav-cta[aria-current] { color:#fff; }
 .site-header nav>.nav-cta::after { display:none; }
+@media(min-width:851px) {
+  .site-header nav { margin-left:auto; }
+  .site-header nav>.nav-cta { flex-shrink:0; white-space:nowrap; }
+  .is-scrolled nav>.nav-cta { height:52px; min-height:52px; padding-block:0; border-radius:7px; }
+  .is-scrolled nav>.nav-cta:hover { transform:none; }
+}
 .menu-intro,.nav-index,.nav-arrow,.menu-contact,.menu-backdrop { display:none; }
 .navigation-open { overflow:hidden; }
 
@@ -69,14 +73,12 @@
   .header-inner { gap:20px; }
   .site-header .brand-name { font-size:24px; }
   .nav-cta { padding-inline:14px; font-size:12px; gap:12px; }
-  .is-scrolled .header-inner { padding-inline:18px; }
+  .is-scrolled .header-inner { padding-inline:18px 10px; }
 }
 @media(max-width:850px) {
   .site-header { height:76px; }
   .header-inner { height:76px; min-height:0; }
-  .is-scrolled .header-inner { top:8px; height:60px; padding-inline:14px; }
-  .is-scrolled .brand-name { font-size:23px; }
-  .is-scrolled .brand-caption { font-size:7px; margin-top:4px; }
+  .is-scrolled .header-inner { top:8px; height:60px; padding:6px 6px 6px 14px; }
   .menu-toggle { width:48px; height:48px; flex:0 0 48px; border:0; gap:6px; padding:13px; position:relative; z-index:3; }
   .menu-toggle span { transition:transform .25s; }
   .menu-toggle[aria-expanded=true] span:first-child { transform:translateY(3.5px) rotate(45deg); }
